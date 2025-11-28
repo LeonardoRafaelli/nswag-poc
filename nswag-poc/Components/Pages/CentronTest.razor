@@ -1,0 +1,111 @@
+@page "/centron-test"
+@using NSwagPoc.CentronService
+@inject ICentronServiceClient CentronClient
+@rendermode InteractiveServer
+
+<PageTitle>Centron Service Test</PageTitle>
+
+<h1>Centron Service API Test</h1>
+
+<div class="mb-3">
+    <h3>Test NavInfo Endpoint</h3>
+    <div class="input-group mb-3">
+        <input type="number" class="form-control" @bind="userId" placeholder="Enter User ID" />
+        <button class="btn btn-primary" @onclick="GetNavInfo">Get System Time</button>
+    </div>
+</div>
+
+@if (isLoading)
+{
+    <div class="alert alert-info">Loading...</div>
+}
+
+@if (!string.IsNullOrEmpty(errorMessage))
+{
+    <div class="alert alert-danger">
+        <strong>Error:</strong> @errorMessage
+    </div>
+}
+
+@if (navInfoResults != null)
+{
+    <div class="card">
+        <div class="card-header">
+            <strong>SystemTime (@navInfoResults)</strong>
+        </div>
+        <div class="card-body">
+            <pre>@System.Text.Json.JsonSerializer.Serialize(navInfoResults, new System.Text.Json.JsonSerializerOptions { WriteIndented = true })</pre>
+        </div>
+    </div>
+}
+
+<hr />
+
+<div class="mb-3">
+    <h3>Test Authentication Endpoint</h3>
+    <button class="btn btn-secondary" @onclick="TestAuthentication">Test Authentication</button>
+</div>
+
+@code {
+    private int userId = 1;
+    private bool isLoading = false;
+    private string errorMessage = string.Empty;
+    private SystemTimeDTO? navInfoResults;
+
+    private async Task GetNavInfo()
+    {
+        isLoading = true;
+        errorMessage = string.Empty;
+        navInfoResults = null;
+
+        try
+        {
+            navInfoResults = await CentronClient.SystemTimeAsync();
+        }
+        catch (ApiException ex)
+        {
+            errorMessage = $"API Exception: {ex.StatusCode} - {ex.Message}";
+        }
+        catch (HttpRequestException ex)
+        {
+            errorMessage = $"HTTP Request Exception: {ex.Message}. Make sure the API is running at http://localhost:1234/CentronService";
+        }
+        catch (Exception ex)
+        {
+            errorMessage = $"Exception: {ex.Message}";
+        }
+        finally
+        {
+            isLoading = false;
+        }
+    }
+
+    private async Task TestAuthentication()
+    {
+        isLoading = true;
+        errorMessage = string.Empty;
+
+        try
+        {
+            await CentronClient.AuthenticationAsync();
+            errorMessage = string.Empty;
+            navInfoResults = null;
+        }
+        catch (ApiException ex)
+        {
+            errorMessage = $"API Exception: {ex.StatusCode} - {ex.Message}";
+        }
+        catch (HttpRequestException ex)
+        {
+            errorMessage = $"HTTP Request Exception: {ex.Message}. Make sure the API is running at http://localhost:1234/CentronService";
+        }
+        catch (Exception ex)
+        {
+            errorMessage = $"Exception: {ex.Message}";
+        }
+        finally
+        {
+            isLoading = false;
+        }
+    }
+}

@@ -1,10 +1,18 @@
 using nswag_poc.Components;
+using NSwagPoc.CentronService;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
+
+// Configure HttpClient for CentronServiceClient
+builder.Services.AddHttpClient<ICentronServiceClient, CentronServiceClient>(client =>
+{
+    client.BaseAddress = new Uri("http://localhost:1234/CentronService");
+    client.Timeout = TimeSpan.FromSeconds(30);
+});
 
 var app = builder.Build();
 
