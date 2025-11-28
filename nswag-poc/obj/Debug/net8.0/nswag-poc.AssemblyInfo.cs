@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("nswag-poc")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+8de9ba2225ca39b052230b3a2a04fcc843b4262a")]
 [assembly: System.Reflection.AssemblyProductAttribute("nswag-poc")]
 [assembly: System.Reflection.AssemblyTitleAttribute("nswag-poc")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
