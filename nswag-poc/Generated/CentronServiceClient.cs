@@ -110,12 +110,12 @@ namespace NSwagPoc.CentronService
 
         /// <returns>OK</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<CustomerPreviewDTO>> CustomersAllAsync();
+        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<CustomerPreviewDTO>> CustomersAsync();
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>OK</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<CustomerPreviewDTO>> CustomersAllAsync(System.Threading.CancellationToken cancellationToken);
+        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<CustomerPreviewDTO>> CustomersAsync(System.Threading.CancellationToken cancellationToken);
 
         /// <returns>OK</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
@@ -162,14 +162,22 @@ namespace NSwagPoc.CentronService
         /// <exception cref="ApiException">A server side error occurred.</exception>
         System.Threading.Tasks.Task<System.Collections.Generic.ICollection<WebshopCustomerArticleDTO>> SpecialPriceArticles3Async(System.Threading.CancellationToken cancellationToken);
 
-        /// <returns>OK</returns>
+        /// <summary>
+        /// Search and return a customer by its I3D
+        /// </summary>
+        /// <param name="customerId">Customer I3D</param>
+        /// <returns>Returns the customer with the specified I3D</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<CustomerDTO> CustomersAsync(int customerId);
+        System.Threading.Tasks.Task<CustomerDTO> GetCustomerByIdAsync(int customerId);
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-        /// <returns>OK</returns>
+        /// <summary>
+        /// Search and return a customer by its I3D
+        /// </summary>
+        /// <param name="customerId">Customer I3D</param>
+        /// <returns>Returns the customer with the specified I3D</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<CustomerDTO> CustomersAsync(int customerId, System.Threading.CancellationToken cancellationToken);
+        System.Threading.Tasks.Task<CustomerDTO> GetCustomerByIdAsync(int customerId, System.Threading.CancellationToken cancellationToken);
 
         /// <returns>OK</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
@@ -971,15 +979,15 @@ namespace NSwagPoc.CentronService
 
         /// <returns>OK</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<System.Collections.Generic.ICollection<CustomerPreviewDTO>> CustomersAllAsync()
+        public virtual System.Threading.Tasks.Task<System.Collections.Generic.ICollection<CustomerPreviewDTO>> CustomersAsync()
         {
-            return CustomersAllAsync(System.Threading.CancellationToken.None);
+            return CustomersAsync(System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>OK</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.ICollection<CustomerPreviewDTO>> CustomersAllAsync(System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.ICollection<CustomerPreviewDTO>> CustomersAsync(System.Threading.CancellationToken cancellationToken)
         {
             var client_ = _httpClient;
             var disposeClient_ = false;
@@ -1447,17 +1455,25 @@ namespace NSwagPoc.CentronService
             }
         }
 
-        /// <returns>OK</returns>
+        /// <summary>
+        /// Search and return a customer by its I3D
+        /// </summary>
+        /// <param name="customerId">Customer I3D</param>
+        /// <returns>Returns the customer with the specified I3D</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<CustomerDTO> CustomersAsync(int customerId)
+        public virtual System.Threading.Tasks.Task<CustomerDTO> GetCustomerByIdAsync(int customerId)
         {
-            return CustomersAsync(customerId, System.Threading.CancellationToken.None);
+            return GetCustomerByIdAsync(customerId, System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-        /// <returns>OK</returns>
+        /// <summary>
+        /// Search and return a customer by its I3D
+        /// </summary>
+        /// <param name="customerId">Customer I3D</param>
+        /// <returns>Returns the customer with the specified I3D</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<CustomerDTO> CustomersAsync(int customerId, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<CustomerDTO> GetCustomerByIdAsync(int customerId, System.Threading.CancellationToken cancellationToken)
         {
             if (customerId == null)
                 throw new System.ArgumentNullException("customerId");
@@ -1508,6 +1524,16 @@ namespace NSwagPoc.CentronService
                                 throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
                             }
                             return objectResponse_.Object;
+                        }
+                        else
+                        if (status_ == 404)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ProblemDetails>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new ApiException<ProblemDetails>("Customer not found", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
                         }
                         else
                         {
@@ -3602,6 +3628,36 @@ namespace NSwagPoc.CentronService
 
         [System.Text.Json.Serialization.JsonPropertyName("device")]
         public string Device { get; set; }
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.6.3.0 (NJsonSchema v11.5.2.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class ProblemDetails
+    {
+
+        [System.Text.Json.Serialization.JsonPropertyName("type")]
+        public string Type { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("title")]
+        public string Title { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("status")]
+        public int? Status { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("detail")]
+        public string Detail { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("instance")]
+        public string Instance { get; set; }
+
+        private System.Collections.Generic.IDictionary<string, object> _additionalProperties;
+
+        [System.Text.Json.Serialization.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties ?? (_additionalProperties = new System.Collections.Generic.Dictionary<string, object>()); }
+            set { _additionalProperties = value; }
+        }
 
     }
 

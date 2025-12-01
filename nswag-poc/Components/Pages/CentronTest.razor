@@ -51,7 +51,8 @@
     private bool isLoading = false;
     private string errorMessage = string.Empty;
     private SystemTimeDTO? navInfoResults;
-
+    private CustomerDTO cust;
+    
     private async Task GetNavInfo()
     {
         isLoading = true;
@@ -60,7 +61,7 @@
 
         try
         {
-            navInfoResults = await CentronClient.SystemTimeAsync();
+            cust = await CentronClient.GetCustomerByIdAsync(2);
         }
         catch (ApiException ex)
         {

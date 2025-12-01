@@ -17,7 +17,7 @@
     </ItemGroup>
 
     <Target Name="NSwag" AfterTargets="Build" Condition="'$(Configuration)' == 'Debug'">
-        <Exec ConsoleToMSBuild="true" ContinueOnError="true" WorkingDirectory="$(ProjectDir)" Command="$(NSwagExe_Net80) run nswag.json /variables:Configuration=$(Configuration)">
+        <Exec ConsoleToMsBuild="true" ContinueOnError="true" WorkingDirectory="$(ProjectDir)" Command="$(NSwagExe_Net80) run nswag.json /variables:Configuration=$(Configuration)">
             <Output TaskParameter="ExitCode" PropertyName="NSwagExitCode" />
             <Output TaskParameter="ConsoleOutput" PropertyName="NSwagOutput" />
         </Exec>
